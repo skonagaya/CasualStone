@@ -38,8 +38,8 @@
 		21EEE28A1CB4776D001B47DB /* start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start.png; sourceTree = "<group>"; };
 		21EEE28C1CB477A5001B47DB /* warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warning.png; sourceTree = "<group>"; };
 		21EEE28E1CB477E6001B47DB /* concede.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = concede.png; sourceTree = "<group>"; };
-		21F0B69D1CB567BB00C9F95A /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		21F0B69F1CB567DA00C9F95A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		21F0B69D1CB567BB00C9F95A /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = CasualStone/LICENSE; sourceTree = "<group>"; };
+		21F0B69F1CB567DA00C9F95A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = CasualStone/README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +56,8 @@
 		21B32A8C1CB0417300A4AB76 = {
 			isa = PBXGroup;
 			children = (
+				21F0B69D1CB567BB00C9F95A /* LICENSE */,
+				21F0B69F1CB567DA00C9F95A /* README.md */,
 				21B32A971CB0417300A4AB76 /* CasualStone */,
 				21B32A961CB0417300A4AB76 /* Products */,
 			);
@@ -79,8 +81,6 @@
 				21B32A9F1CB0417300A4AB76 /* Info.plist */,
 				21B32AA51CB1C87100A4AB76 /* config.json */,
 				21B32AA71CB1CD3F00A4AB76 /* SwiftyJSON.swift */,
-				21F0B69D1CB567BB00C9F95A /* LICENSE */,
-				21F0B69F1CB567DA00C9F95A /* README.md */,
 			);
 			path = CasualStone;
 			sourceTree = "<group>";
