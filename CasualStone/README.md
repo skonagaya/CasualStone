@@ -1,6 +1,8 @@
 # Casual Stone (OS X Only)
 Add notifications to your favorite pass-time application. Parses game application logs and displays specific events to OSX notification center.
 
+![compatibility](https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/demo.png)
+
 Here's a quick [demo](https://gfycat.com/EsteemedRegalKitty) of Casual Stone in Action.
 
 ## Features
@@ -14,6 +16,8 @@ Notifications can be configured to only show for Player, Opponent, or Both.
 ## How to Use
 1. **Open the application** and an icon will appear in your menu bar. There are no dock icons for Casual Stone.
 2. **(Optional) Enter your username.** If it is your first time opening Casual Stone, the application will ask for your card game username. If a username is not provided, Casual Stone will not allow the selection of `Show for Player` and `Show for Opponent`. Casual Stone uses username information to distinguish events between the Player and the Opponent. You can locate your this information below:
+
+![compatibility](https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/username.png)
 3. **Click on Casual Stone Menu Icon** to open the navigation menu. If a username was entered, that username will be displayed at the top of the menu.
 4. **Hover over an event** that you want notifications for and
 5. **Select the player** you want to show notifications for. For example, if you only want notifications for when your turn starts, Hover over `Start Turn >` and select `Show for Player`
