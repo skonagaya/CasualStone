@@ -18,6 +18,7 @@ Notifications can be configured to only show for Player, Opponent, or Both.
 2. **(Optional) Enter your username.** If it is your first time opening Casual Stone, the application will ask for your card game username. If a username is not provided, Casual Stone will not allow the selection of `Show for Player` and `Show for Opponent`. Casual Stone uses username information to distinguish events between the Player and the Opponent. You can locate your this information below:
 
 ![compatibility](https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/username.png)
+
 3. **Click on Casual Stone Menu Icon** to open the navigation menu. If a username was entered, that username will be displayed at the top of the menu.
 4. **Hover over an event** that you want notifications for and
 5. **Select the player** you want to show notifications for. For example, if you only want notifications for when your turn starts, Hover over `Start Turn >` and select `Show for Player`
