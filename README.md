@@ -5,6 +5,9 @@ Add notifications to your favorite pass-time application. Parses game applicatio
 
 Here's a quick [demo](https://gfycat.com/EsteemedRegalKitty) of Casual Stone in Action.
 
+##Download
+Get the app [here](https://drive.google.com/open?id=0B38Rma_N4MlzSmgzYnFLblBYbEE) until I find a better way to distribute.
+
 ## Features
 Notifications can be sent for the following events:
 - **Game Start**: The end of queue and start of mulligan phase.
