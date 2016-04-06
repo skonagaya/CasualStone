@@ -17,11 +17,13 @@
 		21EEE28B1CB4776D001B47DB /* start.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EEE28A1CB4776D001B47DB /* start.png */; };
 		21EEE28D1CB477A5001B47DB /* warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EEE28C1CB477A5001B47DB /* warning.png */; };
 		21EEE28F1CB477E6001B47DB /* concede.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EEE28E1CB477E6001B47DB /* concede.png */; };
+		21F0B69E1CB567BB00C9F95A /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 21F0B69D1CB567BB00C9F95A /* LICENSE */; };
+		21F0B6A01CB567DA00C9F95A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 21F0B69F1CB567DA00C9F95A /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		219845551CB4BDF2009D3239 /* Icon-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-64.png"; sourceTree = "<group>"; };
-		21B32A951CB0417300A4AB76 /* Hearthstone Notifications.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hearthstone Notifications.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		21B32A951CB0417300A4AB76 /* CasualStone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CasualStone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21B32A981CB0417300A4AB76 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21B32A9A1CB0417300A4AB76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21B32A9D1CB0417300A4AB76 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -32,6 +34,8 @@
 		21EEE28A1CB4776D001B47DB /* start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start.png; sourceTree = "<group>"; };
 		21EEE28C1CB477A5001B47DB /* warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warning.png; sourceTree = "<group>"; };
 		21EEE28E1CB477E6001B47DB /* concede.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = concede.png; sourceTree = "<group>"; };
+		21F0B69D1CB567BB00C9F95A /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		21F0B69F1CB567DA00C9F95A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,7 +52,7 @@
 		21B32A8C1CB0417300A4AB76 = {
 			isa = PBXGroup;
 			children = (
-				21B32A971CB0417300A4AB76 /* Hearthstone Notifications */,
+				21B32A971CB0417300A4AB76 /* CasualStone */,
 				21B32A961CB0417300A4AB76 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,12 +60,12 @@
 		21B32A961CB0417300A4AB76 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				21B32A951CB0417300A4AB76 /* Hearthstone Notifications.app */,
+				21B32A951CB0417300A4AB76 /* CasualStone.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		21B32A971CB0417300A4AB76 /* Hearthstone Notifications */ = {
+		21B32A971CB0417300A4AB76 /* CasualStone */ = {
 			isa = PBXGroup;
 			children = (
 				21EEE27D1CB42B1A001B47DB /* images */,
@@ -71,8 +75,10 @@
 				21B32A9F1CB0417300A4AB76 /* Info.plist */,
 				21B32AA51CB1C87100A4AB76 /* config.json */,
 				21B32AA71CB1CD3F00A4AB76 /* SwiftyJSON.swift */,
+				21F0B69D1CB567BB00C9F95A /* LICENSE */,
+				21F0B69F1CB567DA00C9F95A /* README.md */,
 			);
-			path = "Hearthstone Notifications";
+			path = CasualStone;
 			sourceTree = "<group>";
 		};
 		21EEE27D1CB42B1A001B47DB /* images */ = {
@@ -90,9 +96,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		21B32A941CB0417300A4AB76 /* Hearthstone Notifications */ = {
+		21B32A941CB0417300A4AB76 /* CasualStone */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 21B32AA21CB0417300A4AB76 /* Build configuration list for PBXNativeTarget "Hearthstone Notifications" */;
+			buildConfigurationList = 21B32AA21CB0417300A4AB76 /* Build configuration list for PBXNativeTarget "CasualStone" */;
 			buildPhases = (
 				21B32A911CB0417300A4AB76 /* Sources */,
 				21B32A921CB0417300A4AB76 /* Frameworks */,
@@ -102,9 +108,9 @@
 			);
 			dependencies = (
 			);
-			name = "Hearthstone Notifications";
+			name = CasualStone;
 			productName = "Hearthstone Notifications";
-			productReference = 21B32A951CB0417300A4AB76 /* Hearthstone Notifications.app */;
+			productReference = 21B32A951CB0417300A4AB76 /* CasualStone.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -123,7 +129,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 21B32A901CB0417300A4AB76 /* Build configuration list for PBXProject "Hearthstone Notifications" */;
+			buildConfigurationList = 21B32A901CB0417300A4AB76 /* Build configuration list for PBXProject "CasualStone" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -136,7 +142,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				21B32A941CB0417300A4AB76 /* Hearthstone Notifications */,
+				21B32A941CB0417300A4AB76 /* CasualStone */,
 			);
 		};
 /* End PBXProject section */
@@ -152,6 +158,7 @@
 				21EEE2891CB47758001B47DB /* turn.png in Resources */,
 				21B32AA61CB1C87100A4AB76 /* config.json in Resources */,
 				21EEE28F1CB477E6001B47DB /* concede.png in Resources */,
+				21F0B69E1CB567BB00C9F95A /* LICENSE in Resources */,
 				219845561CB4BDF2009D3239 /* Icon-64.png in Resources */,
 				21EEE28B1CB4776D001B47DB /* start.png in Resources */,
 			);
@@ -164,6 +171,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21F0B6A01CB567DA00C9F95A /* README.md in Sources */,
 				21B32A991CB0417300A4AB76 /* AppDelegate.swift in Sources */,
 				21B32AA81CB1CD3F00A4AB76 /* SwiftyJSON.swift in Sources */,
 			);
@@ -272,10 +280,10 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "Hearthstone Notifications/Info.plist";
+				INFOPLIST_FILE = CasualStone/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Konagaya.Hearthstone-Notifications";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Konagaya.CasualStone;
+				PRODUCT_NAME = CasualStone;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -287,10 +295,10 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "Hearthstone Notifications/Info.plist";
+				INFOPLIST_FILE = CasualStone/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Konagaya.Hearthstone-Notifications";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Konagaya.CasualStone;
+				PRODUCT_NAME = CasualStone;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
@@ -298,7 +306,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		21B32A901CB0417300A4AB76 /* Build configuration list for PBXProject "Hearthstone Notifications" */ = {
+		21B32A901CB0417300A4AB76 /* Build configuration list for PBXProject "CasualStone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21B32AA01CB0417300A4AB76 /* Debug */,
@@ -307,7 +315,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		21B32AA21CB0417300A4AB76 /* Build configuration list for PBXNativeTarget "Hearthstone Notifications" */ = {
+		21B32AA21CB0417300A4AB76 /* Build configuration list for PBXNativeTarget "CasualStone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21B32AA31CB0417300A4AB76 /* Debug */,
