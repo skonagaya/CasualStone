@@ -21,10 +21,6 @@ Notifications can be configured to only show for Player, Opponent, or Both.
 5. **Select the player** you want to show notifications for. For example, if you only want notifications for when your turn starts, Hover over `Start Turn >` and select `Show for Player`
 6. **Play and enjoy** the card game. Alt + Tab till your heart's content.
 
-Enter the username found below:
-
-![compatibility](https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/username.png)
-
 Casual Stone will remember the settings that were used the last time the application was launched, including username. If the Player's username is different (ie user logged into another account), set the username by clicking on the `Set Username` menu button. Additionally, Casual Stone will let you know if the username configured was not found in the current card game match.
 
 >Note: If a username was not set by user, Casual Stone will learn this information from the Logs, eventually. Casual Stone will assume a Player username after three successive games. Basically, the app assumes that the username appearing three times in a row is, you, the Player. This has potential for ~~a bug~~ known issue.
