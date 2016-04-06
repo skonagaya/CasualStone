@@ -15,14 +15,15 @@ Notifications can be configured to only show for Player, Opponent, or Both.
 
 ## How to Use
 1. **Open the application** and an icon will appear in your menu bar. There are no dock icons for Casual Stone.
-2. **(Optional) Enter your username.** If it is your first time opening Casual Stone, the application will ask for your card game username. If a username is not provided, Casual Stone will not allow the selection of `Show for Player` and `Show for Opponent`. Casual Stone uses username information to distinguish events between the Player and the Opponent. You can locate your this information below:
-
-![compatibility](https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/username.png)
-
+2. **(Optional) Enter your username.** If it is your first time opening Casual Stone, the application will ask for your card game username. If a username is not provided, Casual Stone will not allow the selection of `Show for Player` and `Show for Opponent`. Casual Stone uses username information to distinguish events between the Player and the Opponent. 
 3. **Click on Casual Stone Menu Icon** to open the navigation menu. If a username was entered, that username will be displayed at the top of the menu.
 4. **Hover over an event** that you want notifications for and
 5. **Select the player** you want to show notifications for. For example, if you only want notifications for when your turn starts, Hover over `Start Turn >` and select `Show for Player`
 6. **Play and enjoy** the card game. Alt + Tab till your heart's content.
+
+Enter the username found below:
+
+![compatibility](https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/username.png)
 
 Casual Stone will remember the settings that were used the last time the application was launched, including username. If the Player's username is different (ie user logged into another account), set the username by clicking on the `Set Username` menu button. Additionally, Casual Stone will let you know if the username configured was not found in the current card game match.
 
