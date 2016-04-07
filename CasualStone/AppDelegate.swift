@@ -233,7 +233,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                             (self.defaults.objectForKey("username") as! String != ""))
                             {
                                 let playerName = self.defaults.objectForKey("username") as! String
-                                if String(notifText).lowercaseString.rangeOfString(playerName) == nil {
+                                if String(notifText).rangeOfString(playerName) == nil {
                                     if !self.playerValid {
                                         NSLog("User name \"" + (self.defaults.objectForKey("username") as! String) + "\" was not found")
                                         notification.title = "User not found"
@@ -252,7 +252,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                                 (self.defaults.objectForKey("username") as! String != ""))
                             {
                                 let playerName = self.defaults.objectForKey("username") as! String
-                                if String(notifText).lowercaseString.rangeOfString(playerName) != nil {
+                                if String(notifText).rangeOfString(playerName) != nil {
                                    
                                     NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
                                     self.playerValid = true
