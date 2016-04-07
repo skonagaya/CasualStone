@@ -1,5 +1,5 @@
 # Casual Stone (OS X Only)
-Add notifications to your favorite pass-time application. Parses game application logs and displays specific events to OSX notification center.
+Add notifications to your favorite pass-time application. Parses game application logs and displays specific events to OSX notification center. The purpose of this app is to make the gameplay experience more efficient. If you agree with this movement, consider giving the project a star and contributing!
 
 ![compatibility](https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/demo.png)
 
@@ -37,12 +37,6 @@ Casual Stone uses the card game application's log files. If the application cann
 
 ## Contact
 Suggestions, issues, and comments can be submitted to swkonagaya@gmail.com
-
-## Donations
-The purpose of this app is to make the gameplay experience more efficient. 
-If you agree that this has helped you save time, please consider donating to motivate support for this application.
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=swkonagaya%40gmail%2ecom&lc=US&item_name=Sean%20Konagaya&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted)
 
 ## License
 MIT License. Just credit people, ya dingus.
