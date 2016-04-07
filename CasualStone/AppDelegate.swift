@@ -26,6 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     var targetList: [String] = []
     var playerValid = true
     var targetDetection: [String] = ["",""]
+    var gameIsActive = false
     
     func usernameMenuClicked(sender : NSMenuItem) {
         let userInput = promptAlert("Enter Username", text: "Your username is used to distinguish you and your opponent.\n\nEnter your username below:")
@@ -185,6 +186,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 if data.length > 0 {
                     
                     if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {
+                        
+                        if (NSWorkspace.sharedWorkspace().activeApplication())!.description.rangeOfString("/Applications/Hearthstone/Hearthstone.app") != nil {
+                            self.gameIsActive = true
+                        } else {self.gameIsActive = false}
                         let trimmedStr = str.stringByReplacingOccurrencesOfString("\n", withString: "")
                         let notifText = content.stringByReplacingOccurrencesOfString("_output_", withString: trimmedStr as String)
                         let notification: NSUserNotification = NSUserNotification()
@@ -197,9 +202,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                         if name == "Start Game"{
                             self.playerValid = true
                             NSLog("Starting game, setting playerValid to true")
-                            NSLog("str: " + (str as String))
-                            NSLog("trimmed: " + (str.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())))
-                            
+                            //NSLog("str: " + (str as String))
+                            //NSLog("trimmed: " + (str.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())))
                             
                             let players = str.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).componentsSeparatedByString("  ")
                             NSLog("players: " + players.description)
@@ -219,15 +223,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                                 self.targetDetection[tempIndex] = player
                                 tempIndex = tempIndex + 1
                             }
-                            
-                            
-                            
                         }
                         
                         
                         switch self.targetList[index] as String{
                         case "BOTH":
-                            NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                            if !self.gameIsActive {
+                                NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                            }
                         case "OPPONENT":
                             if ((self.defaults.objectForKey("username") != nil) &&
                             (self.defaults.objectForKey("username") as! String != ""))
@@ -239,8 +242,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                                         notification.title = "User not found"
                                         notification.informativeText = "Your user name \"" + (self.defaults.objectForKey("username") as! String) + "\" was not found in the match"
                                         notification.contentImage = NSImage(contentsOfFile: NSBundle.mainBundle().pathForResource("warning", ofType: "png")!)
+                                        NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                                    } else {
+                                        if !self.gameIsActive {
+                                            NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                                        }
                                     }
-                                    NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
                                     self.playerValid = false
 
                                 } else if usesUsername {
@@ -253,8 +260,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                             {
                                 let playerName = self.defaults.objectForKey("username") as! String
                                 if String(notifText).rangeOfString(playerName) != nil {
-                                   
-                                    NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                                    
+                                    if !self.gameIsActive {
+                                        NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                                    }
                                     self.playerValid = true
                                 } else if (!self.playerValid) {
                                     NSLog("User name \"" + (self.defaults.objectForKey("username") as! String) + "\" was not found")

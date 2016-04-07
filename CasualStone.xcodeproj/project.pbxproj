@@ -19,8 +19,6 @@
 		21EEE28B1CB4776D001B47DB /* start.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EEE28A1CB4776D001B47DB /* start.png */; };
 		21EEE28D1CB477A5001B47DB /* warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EEE28C1CB477A5001B47DB /* warning.png */; };
 		21EEE28F1CB477E6001B47DB /* concede.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EEE28E1CB477E6001B47DB /* concede.png */; };
-		21F0B69E1CB567BB00C9F95A /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 21F0B69D1CB567BB00C9F95A /* LICENSE */; };
-		21F0B6A01CB567DA00C9F95A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 21F0B69F1CB567DA00C9F95A /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,8 +36,6 @@
 		21EEE28A1CB4776D001B47DB /* start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start.png; sourceTree = "<group>"; };
 		21EEE28C1CB477A5001B47DB /* warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warning.png; sourceTree = "<group>"; };
 		21EEE28E1CB477E6001B47DB /* concede.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = concede.png; sourceTree = "<group>"; };
-		21F0B69D1CB567BB00C9F95A /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = CasualStone/LICENSE; sourceTree = "<group>"; };
-		21F0B69F1CB567DA00C9F95A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = CasualStone/README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +52,6 @@
 		21B32A8C1CB0417300A4AB76 = {
 			isa = PBXGroup;
 			children = (
-				21F0B69D1CB567BB00C9F95A /* LICENSE */,
-				21F0B69F1CB567DA00C9F95A /* README.md */,
 				21B32A971CB0417300A4AB76 /* CasualStone */,
 				21B32A961CB0417300A4AB76 /* Products */,
 			);
@@ -165,7 +159,6 @@
 				21EEE2891CB47758001B47DB /* turn.png in Resources */,
 				21B32AA61CB1C87100A4AB76 /* config.json in Resources */,
 				21EEE28F1CB477E6001B47DB /* concede.png in Resources */,
-				21F0B69E1CB567BB00C9F95A /* LICENSE in Resources */,
 				219845561CB4BDF2009D3239 /* Icon-64.png in Resources */,
 				21C59D901CB58538006C698A /* demo.png in Resources */,
 				21EEE28B1CB4776D001B47DB /* start.png in Resources */,
@@ -179,7 +172,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21F0B6A01CB567DA00C9F95A /* README.md in Sources */,
 				21B32A991CB0417300A4AB76 /* AppDelegate.swift in Sources */,
 				21B32AA81CB1CD3F00A4AB76 /* SwiftyJSON.swift in Sources */,
 			);
