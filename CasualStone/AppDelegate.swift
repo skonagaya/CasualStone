@@ -94,6 +94,52 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
+    
+    
+    func loggingEnabled() -> Bool {
+        let task = NSTask()
+        
+        // Set the task parameters
+        task.launchPath = "/bin/sh"
+        task.arguments = ["-c","if ! [[ $(grep -o -m 1 --line-buffered '\\[Power\\]' ~/Library/Preferences/Blizzard/Hearthstone/log.config 2>/dev/null) = \\[Power\\] ]]; then printf '[Power]\nLogLevel=1\nFilePrinting=true\nConsolePrinting=false\nScreenPrinting=false' >> ~/Library/Preferences/Blizzard/Hearthstone/log.config; touch /Applications/Hearthstone/Logs/Power.log; echo true ; fi"]
+        
+        // Create a Pipe and make the task
+        // put all the output there
+        let pipe = NSPipe()
+        task.standardOutput = pipe
+        
+        // Launch the task
+        task.launch()
+        
+        // Get the data
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let output = NSString(data: data, encoding: NSUTF8StringEncoding)!.stringByReplacingOccurrencesOfString("\n", withString: "")
+        
+        /*
+        let task = NSTask()
+        let command = "if ! [[ $(grep -o -m 1 --line-buffered '\\[Power\\]' ~/Library/Preferences/Blizzard/Hearthstone/log.config 2>/dev/null) = \\[Power\\] \\]\\]; then printf '\\[Power\\]\nLogLevel=1\nFilePrinting=true\nConsolePrinting=false\nScreenPrinting=false' >> ~/Library/Preferences/Blizzard/Hearthstone/log.config; echo true ; fi"
+        task.launchPath = "/bin/sh"
+        NSLog("Command: ")
+        NSLog(command)
+        
+        task.arguments = ["-c", command]
+        
+        let pipe = NSPipe()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        
+        task.standardOutput = pipe
+        task.launch()
+        task.waitUntilExit()
+        
+        
+        let output: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+        let trimmedStr = output.stringByReplacingOccurrencesOfString("\n", withString: "")
+        NSLog("Output: ")
+        NSLog(output)
+ */
+        return output == "true"
+    }
+    
     func createMenuItem(name: String, content: String, command: String, index: Int, target: String, usesUsername: Bool, isCustom: Bool, imageLocation: String) {
         
         let editMenuItem = NSMenuItem()
@@ -326,6 +372,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        
+        if (NSWorkspace.sharedWorkspace().runningApplications.description.rangeOfString("unity.Blizzard Entertainment.Hearthstone") != nil) {
+            NSLog("WTF MAN")
+        }
+        
+        
+        if loggingEnabled() && (NSWorkspace.sharedWorkspace().runningApplications.description.rangeOfString("unity.Blizzard Entertainment.Hearthstone") != nil) {
+            printAlert("Logging Enabled", text: "Please restart Hearthstone in order to start receiving notifications")
+        }
         
         aboutWindow.title = "About Hearthstone Notifications"
         aboutWindow.level = 100
