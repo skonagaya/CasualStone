@@ -6,7 +6,7 @@ Add notifications to your favorite pass-time application. Parses game applicatio
 Here's a quick [demo](https://gfycat.com/EsteemedRegalKitty) of Casual Stone in Action.
 
 ## Download
-Get the app [here](https://drive.google.com/open?id=0B38Rma_N4MlzZkdJaEk0bU9pcE0) until I find a better way to distribute.
+Get the app [here](https://github.com/skonagaya/CasualStone/releases/download/1.3.2/CasualStone.dmg) until I find a better way to distribute.
 
 ## Features
 Notifications can be sent for the following events:
@@ -42,6 +42,3 @@ The purpose of this app is to make the gameplay experience more efficient.
 If you agree that this has helped you save time, please consider donating to motivate support for this application.
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=swkonagaya%40gmail%2ecom&lc=US&item_name=Sean%20Konagaya&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted)
-
-## License
-MIT License. Just credit people, ya dingus.
