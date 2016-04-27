@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		219777161CD04C2B0084599E /* broadcast.json in Resources */ = {isa = PBXBuildFile; fileRef = 219777151CD04C2B0084599E /* broadcast.json */; };
 		219845561CB4BDF2009D3239 /* Icon-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 219845551CB4BDF2009D3239 /* Icon-64.png */; };
 		21B32A991CB0417300A4AB76 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B32A981CB0417300A4AB76 /* AppDelegate.swift */; };
 		21B32A9B1CB0417300A4AB76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21B32A9A1CB0417300A4AB76 /* Assets.xcassets */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		219777151CD04C2B0084599E /* broadcast.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = broadcast.json; sourceTree = "<group>"; };
 		219845551CB4BDF2009D3239 /* Icon-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-64.png"; sourceTree = "<group>"; };
 		21B32A951CB0417300A4AB76 /* CasualStone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CasualStone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21B32A981CB0417300A4AB76 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				21B32A9F1CB0417300A4AB76 /* Info.plist */,
 				21B32AA51CB1C87100A4AB76 /* config.json */,
 				21B32AA71CB1CD3F00A4AB76 /* SwiftyJSON.swift */,
+				219777151CD04C2B0084599E /* broadcast.json */,
 			);
 			path = CasualStone;
 			sourceTree = "<group>";
@@ -158,6 +161,7 @@
 				21B32A9E1CB0417300A4AB76 /* MainMenu.xib in Resources */,
 				21EEE2891CB47758001B47DB /* turn.png in Resources */,
 				21B32AA61CB1C87100A4AB76 /* config.json in Resources */,
+				219777161CD04C2B0084599E /* broadcast.json in Resources */,
 				21EEE28F1CB477E6001B47DB /* concede.png in Resources */,
 				219845561CB4BDF2009D3239 /* Icon-64.png in Resources */,
 				21C59D901CB58538006C698A /* demo.png in Resources */,

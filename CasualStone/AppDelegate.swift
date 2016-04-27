@@ -373,11 +373,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
-        if (NSWorkspace.sharedWorkspace().runningApplications.description.rangeOfString("unity.Blizzard Entertainment.Hearthstone") != nil) {
-            NSLog("WTF MAN")
-        }
-        
-        
         if loggingEnabled() && (NSWorkspace.sharedWorkspace().runningApplications.description.rangeOfString("unity.Blizzard Entertainment.Hearthstone") != nil) {
             printAlert("Logging Enabled", text: "Please restart Hearthstone in order to start receiving notifications")
         }
@@ -396,6 +391,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         
         statusMenu.addItem(userNameItem)
+        
         
         
         // Read the JSON file
