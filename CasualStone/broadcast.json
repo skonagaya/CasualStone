@@ -1,6 +1,7 @@
 {
     "latest": {
         "version": "1.3.2",
-        "commments": "Thanks for updating! Version 1.3.2 has been patched to accomodate the Hearthstone patch Whispers of the Old Gods. Casualstone will also let you know when a new version is available from now on."
+        "comments": "New version supports Whispers of Old Gods Patch. Casualstone will also let you know when a new version is available from now on.",
+        "logchange": "New version supports Whispers of Old Gods Patch. Casualstone will also let you know when a new version is available from now on."
     }
 }

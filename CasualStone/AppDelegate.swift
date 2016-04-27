@@ -28,6 +28,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     var targetDetection: [String] = ["",""]
     var gameIsActive = false
     
+    var currentVersion = "1.3.2"
+    
     func usernameMenuClicked(sender : NSMenuItem) {
         let userInput = promptAlert("Enter Username", text: "Your username is used to distinguish you and your opponent.\n\nEnter your username below:")
         if (userInput != "") {
@@ -391,7 +393,33 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         
         statusMenu.addItem(userNameItem)
+        let urlString = "https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/broadcast.json"
         
+        if let url = NSURL(string: urlString) {
+            if let data = try? NSData(contentsOfURL: url, options: []) {
+                let json = JSON(data: data)
+                
+                if json != JSON.null {
+                    if (currentVersion != json["latest"]["version"].stringValue) {
+                        printAlert("Version Update",text:"New version available below\n\nhttps://github.com/skonagaya/CasualStone/releases")
+                            
+                    }
+                    
+                    if (defaults.objectForKey("logviewed") != nil) {
+                        if (defaults.objectForKey("logviewed") as! String != json["latest"]["version"].stringValue)
+                        {
+                            printAlert("Version Update",text:json["latest"]["logchange"].stringValue)
+                            defaults.setObject(json["latest"]["version"].stringValue, forKey: "logviewed")
+                            defaults.synchronize()
+                        }
+                    } else {
+                        printAlert("Version Update",text:json["latest"]["logchange"].stringValue)
+                        defaults.setObject(json["latest"]["version"].stringValue, forKey: "logviewed")
+                        defaults.synchronize()
+                    }
+                }
+            }
+        }
         
         
         // Read the JSON file
