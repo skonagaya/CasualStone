@@ -4,18 +4,35 @@
                              "notifLabel": "Start Turn",
                              "notifContent": "_output_'s turn started",
                              "notifImageLocation": "turn",
-                             "containsUsername": true
+                             "containsUsername": true,
+                             "showInMenu": true
                              }, {
                              "commandLine": "tail -f /Applications/Hearthstone/Logs/Power.log | grep --line-buffered ' tag=PLAYSTATE value=CONCEDED' | sed -l 's/.*Entity=//g; s/tag=PLAYSTATE.*//g'",
                              "notifLabel": "Concede",
                              "notifContent": "_output_ conceded",
                              "notifImageLocation": "concede",
-                             "containsUsername": true
+                             "containsUsername": true,
+                             "showInMenu": true
                              }, {
                              "commandLine": "tail -f /Applications/Hearthstone/Logs/Power.log | grep --line-buffered 'TAG_CHANGE Entity=.* tag=PLAYER_ID value=' | grep --line-buffered GameState | sed -l 's/.*Entity=//g; s/tag=PLAYER_ID.*//g' | tr -u '\n' ' '",
                              "notifLabel": "Start Game",
                              "notifContent": "Queue finished. Game is now starting",
                              "notifImageLocation": "start",
-                             "containsUsername": false
+                             "containsUsername": false,
+                             "showInMenu": true
+                             }, {
+                             "commandLine": "tail -f /Applications/Hearthstone/Logs/Power.log | grep --line-buffered 'Start Spectator'",
+                             "notifLabel": "Spectating",
+                             "notifContent": "Notifications disabled while spectating",
+                             "notifImageLocation": "start",
+                             "containsUsername": false,
+                             "showInMenu": false
+                             }, {
+                             "commandLine": "tail -f /Applications/Hearthstone/Logs/Power.log | grep --line-buffered ' tag=PLAYSTATE value=WON' | grep --line-buffered GameState | sed -l 's/.*Entity=//g; s/tag=PLAYSTATE.*//g'",
+                             "notifLabel": "Winner",
+                             "notifContent": "_output_ won",
+                             "notifImageLocation": "concede",
+                             "containsUsername": true,
+                             "showInMenu": true
                              }]
         }
