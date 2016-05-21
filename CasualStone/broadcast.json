@@ -1,8 +1,8 @@
 {
     "latest": {
         "version": "1.4.0",
-        "comments": "New features: Notifications disabled in spectator mode, fixed random user not found issue, new Winner event added to menu, and support for alt accounts.",
-        "logchange": "New features: Notifications disabled in spectator mode, fixed random user not found issue, new Winner event added to menu, and support for alt accounts."
+        "comments": "New features:\n\n - Notifications are now disabled in spectator mode\n - Fixed random user not found error when opponents concede\n - New Winner event added to menu\n - Added support for alt accounts",
+        "logchange": "New features:\n\n - Notifications are now disabled in spectator mode\n - Fixed random user not found error when opponents concede\n - New Winner event added to menu\n - Added support for alt accounts"
     },
     "1.3.2": {
         "version": "1.3.2",

@@ -37,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     var usernameList: [String] = []
     
-    var currentVersion = "1.4.0"
+    var currentVersion = "1.3.0"
     
     func usernameMenuClicked(sender : NSMenuItem) {
         let userInput = promptAlert("Enter Username", text: "Your username is used to distinguish you and your opponent.\n\nEnter your username below:")
