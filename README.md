@@ -3,10 +3,10 @@ Add notifications to your favorite pass-time application. Parses game applicatio
 
 ![compatibility](https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/demo.png)
 
-![demo](https://giant.gfycat.com/EsteemedRegalKitty.gif)
+![demo](https://thumbs.gfycat.com/EsteemedRegalKitty-size_restricted.gif)
 
 ## Download
-Get the app [here](https://github.com/skonagaya/CasualStone/releases/download/1.3.2/CasualStone.dmg) until I find a better way to distribute.
+Get the app [here](https://github.com/skonagaya/CasualStone/releases) until I find a better way to distribute.
 
 ## Features
 Notifications can be sent for the following events:
