@@ -3,7 +3,7 @@ Add notifications to your favorite pass-time application. Parses game applicatio
 
 ![compatibility](https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/demo.png)
 
-Here's a quick [demo](https://gfycat.com/EsteemedRegalKitty) of Casual Stone in Action.
+![demo](https://giant.gfycat.com/EsteemedRegalKitty.gif)
 
 ## Download
 Get the app [here](https://github.com/skonagaya/CasualStone/releases/download/1.3.2/CasualStone.dmg) until I find a better way to distribute.
