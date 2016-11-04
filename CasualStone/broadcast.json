@@ -1,5 +1,10 @@
 {
     "latest": {
+        "version": "1.5.0",
+        "comments": "New features:\n\n - Fixed sudden UserNotFound error\n - Update log parsing for 6.2.0",
+        "logchange": "New features:\n\n - Fixed sudden UserNotFound error\n - Update log parsing for 6.2.0"
+    },
+    "1.4.0": {
         "version": "1.4.0",
         "comments": "New features:\n\n - Notifications are now disabled in spectator mode\n - Fixed random user not found error when opponents concede\n - New Winner event added to menu\n - Added support for alt accounts",
         "logchange": "New features:\n\n - Notifications are now disabled in spectator mode\n - Fixed random user not found error when opponents concede\n - New Winner event added to menu\n - Added support for alt accounts"

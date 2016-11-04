@@ -15,10 +15,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     @IBOutlet weak var statusMenu: NSMenu!
     @IBOutlet weak var aboutWindow: NSPanel!
     
-    let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1)
+    let statusItem = NSStatusBar.system().statusItem(withLength: -1)
     let icon = NSImage(named:"statusIcon")
     let checkIcon = NSImage(named:"checkIcon")
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
     
     let aboutBox = NSImageView()
     let removeUsernameMenuItem = NSMenuItem()
@@ -37,39 +37,39 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     var usernameList: [String] = []
     
-    var currentVersion = "1.3.0"
+    var currentVersion = "1.5.0"
     
-    func usernameMenuClicked(sender : NSMenuItem) {
+    func usernameMenuClicked(_ sender : NSMenuItem) {
         let userInput = promptAlert("Enter Username", text: "Your username is used to distinguish you and your opponent.\n\nEnter your username below:")
         if (userInput != "") {
             addToUsernameListLabel(userInput)
         } else {return}
     }
     
-    func removeUsernameMenuClicked(sender : NSMenuItem) {
+    func removeUsernameMenuClicked(_ sender : NSMenuItem) {
         let userInput = promptRemoveUsernameAlert("Select Username", text: "Your username is used to distinguish you and your opponent.\n\nSelect a username to remove")
         if (userInput != "") {
             removeFromUsernameListLabel(userInput)
         } else {return}
     }
     
-    func addToUsernameListLabel (usernameToAdd: String) {
+    func addToUsernameListLabel (_ usernameToAdd: String) {
         playerValid = true // assume that user fixed their problem if they're mid-match
         targetDetectionCounter = 0
         targetDetection[0] = ""
         targetDetection[1] = ""
         usernameList.append(usernameToAdd)
-        defaults.setObject(usernameList, forKey: "username")
+        defaults.set(usernameList, forKey: "username")
         defaults.synchronize()
         updateUsernameListLabel()
     }
     
-    func removeFromUsernameListLabel (usernameToRemove: String) {
+    func removeFromUsernameListLabel (_ usernameToRemove: String) {
         targetDetectionCounter = 0
         targetDetection[0] = ""
         targetDetection[1] = ""
         usernameList = usernameList.filter{$0 != usernameToRemove}
-        defaults.setObject(usernameList, forKey: "username")
+        defaults.set(usernameList, forKey: "username")
         defaults.synchronize()
         updateUsernameListLabel()
     }
@@ -81,14 +81,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 addToUsernameListLabel(userInput)
             } else {
                 userNameItem.attributedTitle = NSAttributedString(string: "Username not set")
-                removeUsernameMenuItem.hidden = true
+                removeUsernameMenuItem.isHidden = true
                 for setting  in resetPointers { // revert all back to "show for both"
                     subMenuClicked(setting as NSMenuItem)
                 }
             }
             
         } else {
-            removeUsernameMenuItem.hidden = false
+            removeUsernameMenuItem.isHidden = false
             var usernameListString = "Playing as:"
             for username in usernameList {
                 usernameListString = usernameListString + "\n  - " + username
@@ -97,26 +97,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
-    func quitMenuClicked(sender : NSMenuItem) {
+    func quitMenuClicked(_ sender : NSMenuItem) {
         NSApp.terminate(self)
     }
     
-    func aboutMenuClicked(sender : NSMenuItem) {
-        NSRunningApplication.currentApplication().activateWithOptions(NSApplicationActivationOptions.ActivateIgnoringOtherApps)
+    func aboutMenuClicked(_ sender : NSMenuItem) {
+        NSRunningApplication.current().activate(options: NSApplicationActivationOptions.activateIgnoringOtherApps)
         aboutWindow.setIsVisible(true)
     }
     
-    func subMenuClicked(sender : NSMenuItem) {
+    func subMenuClicked(_ sender : NSMenuItem) {
         
         if (sender.state > 0) {return} // Do nothing if already selected
         
         if (sender.title == " Show for Opponent" ||
             sender.title == " Show for Player") {
             if (sender.title == " Show for Opponent") {
-                targetList[sender.representedObject!["index"] as! Int] = "OPPONENT"
+                targetList[(sender.representedObject as! [String : Any])["index"] as! Int] = "OPPONENT"
                 playerValid = true
             } else if (sender.title == " Show for Player") {
-                targetList[sender.representedObject!["index"] as! Int] = "PLAYER"
+                targetList[(sender.representedObject as! [String : Any])["index"] as! Int] = "PLAYER"
                 playerValid = true
             }
             
@@ -129,24 +129,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             }
         } else if (sender.title == " None") {
             
-            targetList[sender.representedObject!["index"] as! Int] = "NONE"
+            targetList[(sender.representedObject as! [String : Any])["index"] as! Int] = "NONE"
             //targetList[sender.representedObject!["index"]] = "NONE"
         }
         else if (sender.title == " Show for Both") {
             
-            targetList[sender.representedObject!["index"] as! Int] = "BOTH"
+            targetList[(sender.representedObject as! [String : Any])["index"] as! Int] = "BOTH"
             playerValid = true
         }
         
-        defaults.setObject(targetList, forKey: "targetList")
+        defaults.set(targetList, forKey: "targetList")
         defaults.synchronize()
         NSLog("Synchronized changes to user defaults")
         
-        sender.state = Int(!Bool(sender.state))
+        sender.state = 1 - sender.state
         if(sender.action == #selector(AppDelegate.subMenuClicked(_:))){
-            for itemMore in sender.menu!.itemArray as [NSMenuItem!]{
-                if (itemMore.action == sender.action){
-                    itemMore.state = (itemMore == sender) ? NSOnState : NSOffState;
+            for itemMore in sender.menu!.items as [NSMenuItem?]{
+                if (itemMore?.action == sender.action){
+                    itemMore?.state = (itemMore == sender) ? NSOnState : NSOffState;
                 }
             }
         }
@@ -155,7 +155,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     
     func loggingEnabled() -> Bool {
-        let task = NSTask()
+        let task = Process()
         
         // Set the task parameters
         task.launchPath = "/bin/sh"
@@ -163,7 +163,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         // Create a Pipe and make the task
         // put all the output there
-        let pipe = NSPipe()
+        let pipe = Pipe()
         task.standardOutput = pipe
         
         // Launch the task
@@ -171,7 +171,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         // Get the data
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = NSString(data: data, encoding: NSUTF8StringEncoding)!.stringByReplacingOccurrencesOfString("\n", withString: "")
+        let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue)!.replacingOccurrences(of: "\n", with: "")
         
         /*
         let task = NSTask()
@@ -198,11 +198,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         return output == "true"
     }
     
-    func createMenuItem(name: String, content: String, command: String, index: Int, target: String, usesUsername: Bool, isCustom: Bool, imageLocation: String) {
+    func createMenuItem(_ name: String, content: String, command: String, index: Int, target: String, usesUsername: Bool, isCustom: Bool, imageLocation: String) {
         
         let editMenuItem = NSMenuItem()
         let editSubMenu = NSMenu()
-        let repObj = ["index": index, "target": target ]
+        let repObj = ["index": index, "target": target ] as [String : Any]
         var currentPlayerDetection: [String] = ["",""]
         var currentPlayerDetectionIndexed = false
         //let notifImage = NSImage(contentsOfFile: imageLocation)
@@ -271,8 +271,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         
         
-        let task = NSTask()
-        let pipe = NSPipe()
+        let task = Process()
+        let pipe = Pipe()
         
         task.standardOutput = pipe
         task.launchPath = "/bin/sh"
@@ -285,32 +285,34 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         var obs1 : NSObjectProtocol!
         //var obs2 : NSObjectProtocol!
         
-        obs1 = NSNotificationCenter.defaultCenter().addObserverForName(
-            NSFileHandleDataAvailableNotification,
+        obs1 = NotificationCenter.default.addObserver(
+            forName: NSNotification.Name.NSFileHandleDataAvailable,
             object: outHandle,
             queue: nil) {
                 notification -> Void in
                 let data = outHandle.availableData
-                if data.length > 0 {
+                if data.count > 0 {
                     
-                    if let str = NSString(data: data, encoding: NSUTF8StringEncoding) {
+                    if let str = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
                         
-                        if (NSWorkspace.sharedWorkspace().activeApplication())!.description.rangeOfString("/Applications/Hearthstone/Hearthstone.app") != nil {
+                        NSLog((NSWorkspace.shared().frontmostApplication)!.description)
+                        
+                        if (NSWorkspace.shared().frontmostApplication)!.description.range(of: "Hearthstone") != nil {
                             self.gameIsActive = true
                         } else {self.gameIsActive = false}
-                        let trimmedStr = str.stringByReplacingOccurrencesOfString("\n", withString: "")
-                        let notifText = content.stringByReplacingOccurrencesOfString("_output_", withString: trimmedStr as String)
+                        let trimmedStr = str.replacingOccurrences(of: "\n", with: "")
+                        let notifText = content.replacingOccurrences(of: "_output_", with: trimmedStr as String)
                         let notification: NSUserNotification = NSUserNotification()
                         notification.title = name
                         notification.informativeText = String(notifText)
                         //notification.contentImage = notifImage
-                        notification.contentImage = NSImage(contentsOfFile: NSBundle.mainBundle().pathForResource(imageLocation, ofType: "png")!)
+                        notification.contentImage = NSImage(contentsOfFile: Bundle.main.path(forResource: imageLocation, ofType: "png")!)
                         NSLog("Received: " + trimmedStr + " for Setting: " + name)
                         
                         
                         if name == "Spectating" {
                             self.spectatorModeEnabled = true
-                            NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                            NSUserNotificationCenter.default.deliver(notification)
                             NSLog("Beginning spectator mode")
                         }else if name == "Start Game"{
                             
@@ -322,7 +324,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                             //NSLog("str: " + (str as String))
                             //NSLog("trimmed: " + (str.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())))
                             
-                            let checkDouble = str.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).componentsSeparatedByString("  ")
+                            let checkDouble = str.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).components(separatedBy: "  ")
                             var currentPlayer = ""
                             if checkDouble.count == 1{
                                 currentPlayer = checkDouble[0]
@@ -347,7 +349,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                                 
                                 for player in currentPlayerDetection {
                                     for target in self.targetDetection {
-                                        if player.lowercaseString == target.lowercaseString{
+                                        if player.lowercased() == target.lowercased(){
                                             rematchCount = rematchCount + 1
                                             eligiblePlayer = player
                                         }
@@ -358,7 +360,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                                     self.targetDetectionCounter = self.targetDetectionCounter + 1
                                     NSLog("Match found for player detection: "+eligiblePlayer+" "+String(self.targetDetectionCounter) + " time(s)")
                                     if self.targetDetectionCounter == 2 {
-                                        if self.usernameList.contains({$0.caseInsensitiveCompare(eligiblePlayer) == .OrderedSame}) {
+                                        if self.usernameList.contains(where: {$0.caseInsensitiveCompare(eligiblePlayer) == .orderedSame}) {
                                             NSLog(eligiblePlayer+" already exists in the list")
                                         } else {
                                             NSLog("Adding "+eligiblePlayer+" to list")
@@ -386,27 +388,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                             switch self.targetList[index] as String {
                             case "BOTH":
                                 if !self.gameIsActive {
-                                    NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                                    NSUserNotificationCenter.default.deliver(notification)
                                 }
                             case "OPPONENT":
                                 if (!self.usernameList.isEmpty)
                                 {
                                     var playerFound = false
                                     for username in self.usernameList {
-                                        if String(notifText).lowercaseString.rangeOfString(username.lowercaseString) != nil {
+                                        if String(notifText).lowercased().range(of: username.lowercased()) != nil {
                                             playerFound = true
                                         }
                                     }
                                     if !playerFound {
-                                        if !self.playerValid && String(name).rangeOfString("Concede") == nil && String(name).rangeOfString("Winner") == nil {
+                                        if !self.playerValid && String(name).range(of: "Concede") == nil && String(name).range(of: "Winner") == nil {
                                             NSLog("User name not found")
                                             notification.title = "User not found"
                                             notification.informativeText = "Your usernames were not found in the match"
-                                            notification.contentImage = NSImage(contentsOfFile: NSBundle.mainBundle().pathForResource("warning", ofType: "png")!)
-                                            NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                                            notification.contentImage = NSImage(contentsOfFile: Bundle.main.path(forResource: "warning", ofType: "png")!)
+                                            NSUserNotificationCenter.default.deliver(notification)
                                         } else {
                                             if !self.gameIsActive {
-                                                NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                                                NSUserNotificationCenter.default.deliver(notification)
                                             }
                                         }
                                         self.playerValid = false
@@ -420,7 +422,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                                 {
                                     var playerFound = false
                                     for username in self.usernameList {
-                                        if String(notifText).lowercaseString.rangeOfString(username.lowercaseString) != nil {
+                                        if String(notifText).lowercased().range(of: username.lowercased()) != nil {
                                             NSLog("Match found for " + username)
                                             playerFound = true
                                         }
@@ -428,15 +430,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                                     if playerFound {
                                         
                                         if !self.gameIsActive {
-                                            NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                                            NSUserNotificationCenter.default.deliver(notification)
                                         }
                                         self.playerValid = true
                                     } else if (!self.playerValid) {
                                         NSLog("User name not found")
                                         notification.title = "User not found"
                                         notification.informativeText = "Your usernames were not found in the match"
-                                        notification.contentImage = NSImage(contentsOfFile: NSBundle.mainBundle().pathForResource("warning", ofType: "png")!)
-                                        NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+                                        notification.contentImage = NSImage(contentsOfFile: Bundle.main.path(forResource: "warning", ofType: "png")!)
+                                        NSUserNotificationCenter.default.deliver(notification)
                                     } else if (usesUsername) {
                                         self.playerValid = false
                                     }
@@ -452,7 +454,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                     outHandle.waitForDataInBackgroundAndNotify()
                 } else {
                     //print("EOF on stdout from process")
-                    NSNotificationCenter.defaultCenter().removeObserver(obs1)
+                    NotificationCenter.default.removeObserver(obs1)
                 }
         }
         /*
@@ -473,18 +475,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     func resetDefaults () {
         
         for key in Array(defaults.dictionaryRepresentation().keys) {
-            defaults.removeObjectForKey(key)
+            defaults.removeObject(forKey: key)
         }
-        defaults.removeObjectForKey("targetList")
-        defaults.setObject(nil, forKey: "targetList")
+        defaults.removeObject(forKey: "targetList")
+        //defaults.set(nil, forKey: "targetList")
         defaults.synchronize()
     }
     
     
 
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
         
-        if loggingEnabled() && (NSWorkspace.sharedWorkspace().runningApplications.description.rangeOfString("unity.Blizzard Entertainment.Hearthstone") != nil) {
+        if loggingEnabled() && (NSWorkspace.shared().runningApplications.description.range(of: "unity.Blizzard Entertainment.Hearthstone") != nil) {
             printAlert("Logging Enabled", text: "Please restart Hearthstone in order to start receiving notifications")
         }
         
@@ -492,21 +494,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         aboutWindow.level = 100
         //aboutWindow.setFloat = true
         
-        icon?.template = true
-        checkIcon?.template = true
+        icon?.isTemplate = true
+        checkIcon?.isTemplate = true
         
         statusItem.image = icon
         statusItem.menu = statusMenu
         
-        NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self;
+        NSUserNotificationCenter.default.delegate = self;
         
         
         statusMenu.addItem(userNameItem)
-        statusMenu.addItem(NSMenuItem.separatorItem())
+        statusMenu.addItem(NSMenuItem.separator())
         let urlString = "https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/broadcast.json"
         
-        if let url = NSURL(string: urlString) {
-            if let data = try? NSData(contentsOfURL: url, options: []) {
+        if let url = URL(string: urlString) {
+            if let data = try? Data(contentsOf: url, options: []) {
                 let json = JSON(data: data)
                 
                 if json != JSON.null {
@@ -515,16 +517,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                             
                     }
                     
-                    if (defaults.objectForKey("logviewed") != nil) {
-                        if (defaults.objectForKey("logviewed") as! String != json["latest"]["version"].stringValue)
+                    if (defaults.object(forKey: "logviewed") != nil) {
+                        if (defaults.object(forKey: "logviewed") as! String != json["latest"]["version"].stringValue)
                         {
                             printAlert("Version Update",text:json["latest"]["logchange"].stringValue)
-                            defaults.setObject(json["latest"]["version"].stringValue, forKey: "logviewed")
+                            defaults.set(json["latest"]["version"].stringValue, forKey: "logviewed")
                             defaults.synchronize()
                         }
                     } else {
                         printAlert("Version Update",text:json["latest"]["logchange"].stringValue)
-                        defaults.setObject(json["latest"]["version"].stringValue, forKey: "logviewed")
+                        defaults.set(json["latest"]["version"].stringValue, forKey: "logviewed")
                         defaults.synchronize()
                     }
                 }
@@ -533,18 +535,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         
         // Read the JSON file
-        if let path = NSBundle.mainBundle().pathForResource("config", ofType: "json") {
+        if let path = Bundle.main.path(forResource: "config", ofType: "json") {
             do {
-                let data = try NSData(contentsOfURL: NSURL(fileURLWithPath: path), options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: NSData.ReadingOptions.mappedIfSafe)
                 let jsonObj = JSON(data: data)
                 if jsonObj != JSON.null {
                     
                     // We'll keep track of the JSON file in case it was modified
                     // Because if it's modified, then the defaults would become invalid (ie won't match)
-                    if (defaults.objectForKey("JSON") != nil)
+                    if (defaults.object(forKey: "JSON") != nil)
                     {
                         NSLog("Found pre-existing JSON")
-                        if (defaults.objectForKey("JSON") as! String != jsonObj.rawString()!)
+                        if (defaults.object(forKey: "JSON") as! String != jsonObj.rawString()!)
                         {
                             printAlert("Reverting Defaults", text: "We found changes to your configuration file so we're reverting to default values.")
                             resetDefaults()
@@ -553,15 +555,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                     }
                     
                     // Save a copy of the config file in defaults
-                    defaults.setObject(jsonObj.rawString()!, forKey: "JSON")
+                    defaults.set(jsonObj.rawString()!, forKey: "JSON")
                     defaults.synchronize()
                     
                     var defaultTargetListFound = false
                     
                     
-                    if (defaults.objectForKey("targetList") != nil)
+                    if (defaults.object(forKey: "targetList") != nil)
                     {
-                        targetList = (defaults.objectForKey("targetList") as! [String])
+                        targetList = (defaults.object(forKey: "targetList") as! [String])
                         NSLog("Found pre-existing targetList")
                         NSLog(targetList[0])
                         defaultTargetListFound = true
@@ -599,7 +601,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                     NSLog(targetList.description)
                     
                     NSLog("Finished creating menu items")
-                    defaults.setObject(targetList, forKey: "targetList")
+                    defaults.set(targetList, forKey: "targetList")
                     defaults.synchronize()
                     NSLog("Synchronized initial targetList to user defaults")
                     
@@ -623,7 +625,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
         
         
-        statusMenu.addItem(NSMenuItem.separatorItem())
+        statusMenu.addItem(NSMenuItem.separator())
         
         let usernameMenuItem = NSMenuItem()
         usernameMenuItem.title = "Add Username"
@@ -635,7 +637,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         removeUsernameMenuItem.action = #selector(AppDelegate.removeUsernameMenuClicked(_:))
         
         if usernameList.isEmpty{
-            removeUsernameMenuItem.hidden = true
+            removeUsernameMenuItem.isHidden = true
         }
         
         let aboutMenuItem = NSMenuItem()
@@ -649,70 +651,70 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         quitMenuItem.action = #selector(AppDelegate.quitMenuClicked(_:))
         
         
-        if defaults.objectForKey("username") == nil || (defaults.objectForKey("username") as! [String]).isEmpty {
+        if defaults.object(forKey: "username") == nil || (defaults.object(forKey: "username") as! [String]).isEmpty {
             
             let userInput = promptAlert("Notification Setup", text: "Your username is used to distinguish you and your opponent.\n\nEnter your username below:")
             if (userInput != "") {
                 addToUsernameListLabel(userInput)
             } else {
                 userNameItem.attributedTitle = NSAttributedString(string: "Username not set")
-                removeUsernameMenuItem.hidden = true
+                removeUsernameMenuItem.isHidden = true
             }
         } else {
-            usernameList = defaults.objectForKey("username") as! [String]
+            usernameList = defaults.object(forKey: "username") as! [String]
             updateUsernameListLabel()
         }
         
 
     }
-    func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
+    func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
         return true
     }
     
-    func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
+    func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
         if notification.title == "User not found" {
             let userInput = promptAlert("Need more info", text: "Your username is used to distinguish you and your opponent.\n\nEnter your username below:")
             if (userInput != "") {
                 addToUsernameListLabel(userInput)
             } else {return}
         } else {
-                NSWorkspace.sharedWorkspace().launchApplication("/Applications/Hearthstone/Hearthstone.app")
+                NSWorkspace.shared().launchApplication("/Applications/Hearthstone/Hearthstone.app")
         }
         
     }
     
 
-    func applicationWillTerminate(aNotification: NSNotification) {
+    func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
 
-    @IBAction func menuClicked(sender: NSMenuItem) {
+    @IBAction func menuClicked(_ sender: NSMenuItem) {
         
         
     }
     
-    func printAlert(title: String, text: String){
-        NSRunningApplication.currentApplication().activateWithOptions(NSApplicationActivationOptions.ActivateIgnoringOtherApps)
+    func printAlert(_ title: String, text: String){
+        NSRunningApplication.current().activate(options: NSApplicationActivationOptions.activateIgnoringOtherApps)
         let myPopup: NSAlert = NSAlert()
         myPopup.messageText = title
         myPopup.informativeText = text
-        myPopup.alertStyle = NSAlertStyle.WarningAlertStyle
-        myPopup.addButtonWithTitle("OK")
+        myPopup.alertStyle = NSAlertStyle.warning
+        myPopup.addButton(withTitle: "OK")
         myPopup.runModal()
     }
     
-    func promptRemoveUsernameAlert(title: String, text: String) -> String {
-        NSRunningApplication.currentApplication().activateWithOptions(NSApplicationActivationOptions.ActivateIgnoringOtherApps)
+    func promptRemoveUsernameAlert(_ title: String, text: String) -> String {
+        NSRunningApplication.current().activate(options: NSApplicationActivationOptions.activateIgnoringOtherApps)
         let msg = NSAlert()
         
-        msg.addButtonWithTitle("OK")      // 1st button
-        msg.addButtonWithTitle("Cancel")  // 2nd button
+        msg.addButton(withTitle: "OK")      // 1st button
+        msg.addButton(withTitle: "Cancel")  // 2nd button
         msg.messageText = title
         msg.informativeText = text
         
         let accessory = NSPopUpButton(frame: NSMakeRect(0,0,200,24))
-        accessory.addItemsWithTitles(usernameList)
-        accessory.selectItemAtIndex(0)
+        accessory.addItems(withTitles: usernameList)
+        accessory.selectItem(at: 0)
         
         msg.accessoryView = accessory
         let response: NSModalResponse = msg.runModal()
@@ -724,11 +726,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
-    func promptAlert(title: String, text: String) -> String {
-        NSRunningApplication.currentApplication().activateWithOptions(NSApplicationActivationOptions.ActivateIgnoringOtherApps)
+    func promptAlert(_ title: String, text: String) -> String {
+        NSRunningApplication.current().activate(options: NSApplicationActivationOptions.activateIgnoringOtherApps)
         let msg = NSAlert()
-        msg.addButtonWithTitle("OK")      // 1st button
-        msg.addButtonWithTitle("Cancel")  // 2nd button
+        msg.addButton(withTitle: "OK")      // 1st button
+        msg.addButton(withTitle: "Cancel")  // 2nd button
         msg.messageText = title
         msg.informativeText = text
         

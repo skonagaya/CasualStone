@@ -21,7 +21,7 @@
                              "containsUsername": false,
                              "showInMenu": true
                              }, {
-                             "commandLine": "tail -f /Applications/Hearthstone/Logs/Power.log | grep --line-buffered 'Start Spectator'",
+                             "commandLine": "tail -f /Applications/Hearthstone/Logs/Power.log | grep --line-buffered 'Begin Spectating'",
                              "notifLabel": "Spectating",
                              "notifContent": "Notifications disabled while spectating",
                              "notifImageLocation": "start",
