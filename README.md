@@ -3,10 +3,10 @@ Add notifications to your favorite pass-time application. Parses game applicatio
 
 ![compatibility](https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/demo.png)
 
-Here's a quick [demo](https://gfycat.com/EsteemedRegalKitty) of Casual Stone in Action.
+![demo](https://thumbs.gfycat.com/EsteemedRegalKitty-size_restricted.gif)
 
 ## Download
-Get the app [here](https://github.com/skonagaya/CasualStone/releases/download/1.3.2/CasualStone.dmg) until I find a better way to distribute.
+Get the app [here](https://github.com/skonagaya/CasualStone/releases) until I find a better way to distribute.
 
 ## Features
 Notifications can be sent for the following events:
@@ -35,10 +35,10 @@ Application has been successfully tested on:
 ## Troubleshooting
 Casual Stone uses the card game application's log files. If the application cannot locate the log file, notifications will fail. The application expects the logs to be found at `/Applications/Hearthstone/Logs/Power.log`
 
+Keep in mind you only receive notifications if you don't have Hearthstone focused. Also you can take a look at [this](https://github.com/jleclanche/fireplace/wiki/How-to-enable-logging) to make sure logging is correctly enabled. The Hearthstone application must be restarted after logging is enabled.
+
 ## Contact
 Suggestions, issues, and comments can be submitted to swkonagaya@gmail.com
 
 The purpose of this app is to make the gameplay experience more efficient. 
 If you agree that this has helped you save time, please consider donating to motivate support for this application.
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=swkonagaya%40gmail%2ecom&lc=US&item_name=Sean%20Konagaya&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted)
