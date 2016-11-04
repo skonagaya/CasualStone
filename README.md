@@ -37,6 +37,8 @@ Casual Stone uses the card game application's log files. If the application cann
 
 Keep in mind you only receive notifications if you don't have Hearthstone focused. Also you can take a look at [this](https://github.com/jleclanche/fireplace/wiki/How-to-enable-logging) to make sure logging is correctly enabled. The Hearthstone application must be restarted after logging is enabled.
 
+Due to the limitations of Blizzard's Terms of Service, there is a possiblity that a newly release patch may break CasualStone. If notifications are failing after a patch release, notify the contributors of CasualStone so a new version can be released. However if you wish to put matters in your own hands, you may choose to fix the app yourself by modifying the unix commands found in the config.json file within the CasualStone.app file.
+
 ## Contact
 Suggestions, issues, and comments can be submitted to swkonagaya@gmail.com
 
