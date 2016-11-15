@@ -309,6 +309,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                         notification.contentImage = NSImage(contentsOfFile: Bundle.main.path(forResource: imageLocation, ofType: "png")!)
                         NSLog("Received: " + trimmedStr + " for Setting: " + name)
                         
+                        if name == "Concede" || name == "Winner" {
+                            NSLog("Detected Concede or Winner")
+                            NSLog("Resetting player valid flag")
+                            self.playerValid = true
+                        }
+                        
                         
                         if name == "Spectating" {
                             self.spectatorModeEnabled = true

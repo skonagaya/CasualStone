@@ -1,5 +1,10 @@
 {
     "latest": {
+        "version": "1.5.1",
+        "comments": "New features:\n\n - Fixed UserNotFound after opponent Conceding",
+        "logchange": "New features:\n\n - Fixed UserNotFound after opponent Conceding"
+    },
+    "latest": {
         "version": "1.5.0",
         "comments": "New features:\n\n - Fixed sudden UserNotFound error\n - Update log parsing for 6.2.0",
         "logchange": "New features:\n\n - Fixed sudden UserNotFound error\n - Update log parsing for 6.2.0"
