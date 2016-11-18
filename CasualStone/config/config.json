@@ -1,0 +1,5 @@
+{
+    "broadcastUrl" : "https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/broadcast.json",
+    "notificationUrl" : "https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/notification.json",
+    "powerLogPath" : ""
+}
