@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2133E9F91CF1304900E47268 /* demo.png in Resources */ = {isa = PBXBuildFile; fileRef = 2133E9F81CF1304900E47268 /* demo.png */; };
-		2133E9FB1CF1305900E47268 /* demo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2133E9FA1CF1305900E47268 /* demo.gif */; };
+		2134B67F1DDFC687009AA1D2 /* notification.json in Resources */ = {isa = PBXBuildFile; fileRef = 2134B67E1DDFC687009AA1D2 /* notification.json */; };
 		219777161CD04C2B0084599E /* broadcast.json in Resources */ = {isa = PBXBuildFile; fileRef = 219777151CD04C2B0084599E /* broadcast.json */; };
 		219845561CB4BDF2009D3239 /* Icon-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 219845551CB4BDF2009D3239 /* Icon-64.png */; };
 		21B32A991CB0417300A4AB76 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B32A981CB0417300A4AB76 /* AppDelegate.swift */; };
@@ -25,7 +25,7 @@
 
 /* Begin PBXFileReference section */
 		2133E9F81CF1304900E47268 /* demo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = demo.png; sourceTree = "<group>"; };
-		2133E9FA1CF1305900E47268 /* demo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = demo.gif; sourceTree = "<group>"; };
+		2134B67E1DDFC687009AA1D2 /* notification.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = notification.json; sourceTree = "<group>"; };
 		219777151CD04C2B0084599E /* broadcast.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = broadcast.json; sourceTree = "<group>"; };
 		219845551CB4BDF2009D3239 /* Icon-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-64.png"; sourceTree = "<group>"; };
 		21B32A951CB0417300A4AB76 /* CasualStone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CasualStone.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +79,7 @@
 				21B32A9F1CB0417300A4AB76 /* Info.plist */,
 				21B32AA51CB1C87100A4AB76 /* config.json */,
 				21B32AA71CB1CD3F00A4AB76 /* SwiftyJSON.swift */,
+				2134B67E1DDFC687009AA1D2 /* notification.json */,
 				219777151CD04C2B0084599E /* broadcast.json */,
 			);
 			path = CasualStone;
@@ -89,7 +90,6 @@
 			children = (
 				21C59D8C1CB5839B006C698A /* username.png */,
 				2133E9F81CF1304900E47268 /* demo.png */,
-				2133E9FA1CF1305900E47268 /* demo.gif */,
 				21EEE2881CB47758001B47DB /* turn.png */,
 				21EEE28E1CB477E6001B47DB /* concede.png */,
 				21EEE28C1CB477A5001B47DB /* warning.png */,
@@ -161,7 +161,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				21EEE28D1CB477A5001B47DB /* warning.png in Resources */,
-				2133E9FB1CF1305900E47268 /* demo.gif in Resources */,
 				21B32A9B1CB0417300A4AB76 /* Assets.xcassets in Resources */,
 				21C59D8E1CB5839B006C698A /* username.png in Resources */,
 				21B32A9E1CB0417300A4AB76 /* MainMenu.xib in Resources */,
@@ -171,6 +170,7 @@
 				21EEE28F1CB477E6001B47DB /* concede.png in Resources */,
 				219845561CB4BDF2009D3239 /* Icon-64.png in Resources */,
 				2133E9F91CF1304900E47268 /* demo.png in Resources */,
+				2134B67F1DDFC687009AA1D2 /* notification.json in Resources */,
 				21EEE28B1CB4776D001B47DB /* start.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

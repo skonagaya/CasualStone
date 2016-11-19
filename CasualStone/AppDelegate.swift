@@ -1,3 +1,4 @@
+
 //
 //  AppDelegate.swift
 //  Hearthstone Notifications
@@ -10,10 +11,12 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
-
+    
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var statusMenu: NSMenu!
     @IBOutlet weak var aboutWindow: NSPanel!
+    
+    let DEFAULT_POWER_LOG_PATH = "/Applications/Hearthstone/Logs/Power.log"
     
     let statusItem = NSStatusBar.system().statusItem(withLength: -1)
     let icon = NSImage(named:"statusIcon")
@@ -33,11 +36,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     var targetDetection: [String] = ["",""]
     var gameIsActive = false
     
+    var enableSync = false
+    
     var targetDetectionCounter = 0
     
     var usernameList: [String] = []
     
-    var currentVersion = "1.5.0"
+    var clientVersion = "1.6.0"
+    
+    var broadcastUrl = ""
+    var notificationUrl = ""
+    var customPowerLogPath = ""
+    var releaseUrl = ""
+    var userCustomPowerLog = false
     
     func usernameMenuClicked(_ sender : NSMenuItem) {
         let userInput = promptAlert("Enter Username", text: "Your username is used to distinguish you and your opponent.\n\nEnter your username below:")
@@ -45,6 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             addToUsernameListLabel(userInput)
         } else {return}
     }
+    
     
     func removeUsernameMenuClicked(_ sender : NSMenuItem) {
         let userInput = promptRemoveUsernameAlert("Select Username", text: "Your username is used to distinguish you and your opponent.\n\nSelect a username to remove")
@@ -152,7 +164,292 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
+    func initializeMenuItems() {
+        
+        
+        if loggingEnabled() && (NSWorkspace.shared().runningApplications.description.range(of: "unity.Blizzard Entertainment.Hearthstone") != nil) {
+            printAlert("Logging Enabled", text: "Please restart Hearthstone in order to start receiving notifications")
+        }
+        
+        aboutWindow.title = "About Hearthstone Notifications"
+        aboutWindow.level = 100
+        //aboutWindow.setFloat = true
+        
+        icon?.isTemplate = true
+        checkIcon?.isTemplate = true
+        
+        statusItem.image = icon
+        statusItem.menu = statusMenu
+        
+        NSUserNotificationCenter.default.delegate = self;
+        statusMenu.addItem(userNameItem)
+        statusMenu.addItem(NSMenuItem.separator())
+    }
     
+    func loadSyncConfiguration() {
+        
+        let alreadyBeenAskedToEnableSyncing = defaults.object(forKey: "patchsyncviewed") != nil
+        
+        // ask to enable patch sync
+        if !alreadyBeenAskedToEnableSyncing {
+            enableSync = promptConfirmationAlert("Sync Patch Info",text:"Automatically sync notification so that you no longer have to download a new version of CasualStone after every Hearthstone Patch release.")
+            defaults.set(true,forKey:"patchsyncviewed")
+            defaults.set(enableSync,forKey:"syncPatch")
+            defaults.synchronize()
+            
+            // this should never happen but just set to false just in case
+        } else if (defaults.object(forKey:"syncPatch") == nil) {
+            enableSync = false
+            defaults.set(true,forKey:"patchsyncviewed")
+            defaults.set(enableSync,forKey:"syncPatch")
+            defaults.synchronize()
+            
+            // otherwise just configure user's default for syncing
+        } else {
+            enableSync = defaults.object(forKey:"syncPatch") as! Bool
+        }
+    }
+    
+    func loadConfigurationFile() {
+        
+        // Read the JSON file
+        if let path = Bundle.main.path(forResource: "config", ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: NSData.ReadingOptions.mappedIfSafe)
+                let jsonObj = JSON(data: data)
+                if jsonObj != JSON.null {
+                    
+                    broadcastUrl        = jsonObj["broadcastUrl"].stringValue
+                    notificationUrl     = jsonObj["notificationUrl"].stringValue
+                    customPowerLogPath  = jsonObj["customPowerLogPath"].stringValue
+                    releaseUrl          = jsonObj["releaseUrl"].stringValue
+                    
+                    if customPowerLogPath != "" {
+                        userCustomPowerLog = true
+                    }
+                    
+                    NSLog("=== Loading Configuration Variables ===")
+                    NSLog("broadcastUrl:        " + broadcastUrl)
+                    NSLog("notificationUrl:     " + notificationUrl)
+                    NSLog("customPowerLogPath:  " + customPowerLogPath)
+                    NSLog("releaseUrl:          " + releaseUrl)
+                    NSLog("=======================================")
+                    
+                } else {
+                    printAlert("Error",text: "Unable to read configuration file. The application will close.")
+                    NSApp.terminate(self)
+                }
+            } catch let error as NSError {
+                printAlert("Error",text: error.localizedDescription)
+                NSLog(error.localizedDescription)
+                NSApp.terminate(self)
+            }
+        } else {
+            printAlert("Error",text: "Unable to locate configuration file.")
+            NSLog("Invalid filename/path.")
+            NSApp.terminate(self)
+        }
+    }
+    
+    func loadBroadcastRequest() {
+        
+        if let url = URL(string: broadcastUrl) {
+            if let data = try? Data(contentsOf: url, options: []) {
+                
+                let json = JSON(data: data)
+                if json != JSON.null {
+                    
+                    // see if client version is not the latest version (downloaded from broadcast URL)
+                    if (clientVersion != json["latest"]["version"].stringValue) {
+                        
+                        // Let the user know that a new version is available
+                        printAlert("Version Update",text:"New version available below\n\nhttps://github.com/skonagaya/CasualStone/releases")
+                        
+                    }
+                    
+                    
+                    if (defaults.object(forKey: "logviewed") != nil) {
+                        if (defaults.object(forKey: "logviewed") as! String != json["latest"]["version"].stringValue)
+                        {
+                            printAlert("Version Update",text:json["latest"]["logchange"].stringValue)
+                            defaults.set(json["latest"]["version"].stringValue, forKey: "logviewed")
+                            defaults.synchronize()
+                        }
+                    } else {
+                        printAlert("Version Update",text:json["latest"]["logchange"].stringValue)
+                        defaults.set(json["latest"]["version"].stringValue, forKey: "logviewed")
+                        defaults.synchronize()
+                    }
+                }
+            } else {
+                NSLog("Unable to reach URL: \"" + broadcastUrl + "\"")
+            }
+        }
+    }
+    
+    // try to download newest notifications
+    // if that fails, load a cached version
+    // if that fails, load the local json
+    // if that fails, kill app
+    func loadNotifications() {
+        
+        var notificationJSON: JSON!
+        var successfulDownload = true
+        let backupMissing = defaults.object(forKey: "JSON") == nil
+        
+        // download the newest information
+        if let url = URL(string: notificationUrl) {
+            if let data = try? Data(contentsOf: url, options: []) {
+                
+                notificationJSON = JSON(data: data)
+                if notificationJSON != JSON.null {
+                    NSLog("Successfully downloaded notification json")
+                    // cache the newest information
+                    defaults.set(notificationJSON.rawString(), forKey: "JSON")
+                    defaults.synchronize()
+                }
+            } else {
+                
+                // if it fails let the user know and move on to search for a cached version
+                printAlert("Download Error", text: "Unable to download patch info. Reverting to older notification settings")
+                NSLog("Unable to reach URL: \"" + broadcastUrl + "\"")
+                successfulDownload = false
+            }
+        }
+        
+        // check here if download fails
+        if (!successfulDownload) {
+            
+            // if the cache is missing, load from local notification file
+            if (backupMissing) {
+                NSLog("Backup Cache was not found")
+                if let path = Bundle.main.path(forResource: "notification", ofType: "json") {
+                    do {
+                        let data = try Data(contentsOf: URL(fileURLWithPath: path), options: NSData.ReadingOptions.mappedIfSafe)
+                        notificationJSON = JSON(data: data)
+                        if notificationJSON == JSON.null {
+                            printAlert("Error",text: "Unable to read notification file. The application will close.")
+                            NSApp.terminate(self)
+                        }
+                    } catch let error as NSError {
+                        printAlert("Error",text: error.localizedDescription)
+                        NSLog(error.localizedDescription)
+                        NSApp.terminate(self)
+                    }
+                } else {
+                    printAlert("Error",text: "Unable to locate notification file.")
+                    NSLog("Invalid filename/path.")
+                    NSApp.terminate(self)
+                }
+                
+            // if cache is available, load it up
+            } else {
+                NSLog("Backup Cache was found")
+                notificationJSON = JSON.parse(defaults.object(forKey: "JSON") as! String)
+            }
+            
+        }
+        
+        var defaultTargetListFound = false
+        
+        if (defaults.object(forKey: "targetList") != nil)
+        {
+            targetList = (defaults.object(forKey: "targetList") as! [String])
+            NSLog("Found pre-existing targetList")
+            NSLog(targetList[0])
+            defaultTargetListFound = true
+        }
+        
+        // Create a menu item for each JSON entry
+        var notifIndex = 0
+        for notifObj in notificationJSON["notificationList"].arrayValue {
+            let label = notifObj["notifLabel"].stringValue
+            let content = notifObj["notifContent"].stringValue
+            var command = notifObj["commandLine"].stringValue
+            let image = notifObj["notifImageLocation"].stringValue
+            let containsUsername = notifObj["containsUsername"].boolValue
+            let showInMenu = notifObj["showInMenu"].boolValue
+            
+            if userCustomPowerLog {
+                command = command.replacingOccurrences(of: DEFAULT_POWER_LOG_PATH, with: customPowerLogPath)
+            }
+            
+            if !defaultTargetListFound {
+                targetList.append("BOTH")
+            }
+            
+            if (showInMenu){
+                
+                createMenuItem(label,
+                               content: content,
+                               command: command,
+                               index: notifIndex,
+                               target: targetList[notifIndex],
+                               usesUsername: containsUsername,
+                               isCustom: false,
+                               imageLocation: image
+                )
+                
+                notifIndex = notifIndex + 1
+            }
+        }
+        
+        NSLog(targetList.description)
+        
+        NSLog("Finished creating menu items")
+        defaults.set(targetList, forKey: "targetList")
+        defaults.synchronize()
+        NSLog("Synchronized initial targetList to user defaults")
+        
+        if let menuName = notificationJSON["notificationList"][0]["menuName"].string {
+            NSLog(menuName)
+        }
+    }
+    
+    func renderMenuItemsUsingNotifications() {
+        
+        statusMenu.addItem(NSMenuItem.separator())
+        
+        let usernameMenuItem = NSMenuItem()
+        usernameMenuItem.title = "Add Username"
+        statusMenu.addItem(usernameMenuItem)
+        usernameMenuItem.action = #selector(AppDelegate.usernameMenuClicked(_:))
+        
+        removeUsernameMenuItem.title = "Remove Username"
+        statusMenu.addItem(removeUsernameMenuItem)
+        removeUsernameMenuItem.action = #selector(AppDelegate.removeUsernameMenuClicked(_:))
+        
+        if usernameList.isEmpty{
+            removeUsernameMenuItem.isHidden = true
+        }
+        
+        statusMenu.addItem(NSMenuItem.separator())
+        
+        let aboutMenuItem = NSMenuItem()
+        aboutMenuItem.title = "About"
+        statusMenu.addItem(aboutMenuItem)
+        aboutMenuItem.action = #selector(AppDelegate.aboutMenuClicked(_:))
+        
+        let quitMenuItem = NSMenuItem()
+        quitMenuItem.title = "Quit"
+        statusMenu.addItem(quitMenuItem)
+        quitMenuItem.action = #selector(AppDelegate.quitMenuClicked(_:))
+        
+        
+        if defaults.object(forKey: "username") == nil || (defaults.object(forKey: "username") as! [String]).isEmpty {
+            
+            let userInput = promptAlert("Notification Setup", text: "Your username is used to distinguish you and your opponent.\n\nEnter your username below:")
+            if (userInput != "") {
+                addToUsernameListLabel(userInput)
+            } else {
+                userNameItem.attributedTitle = NSAttributedString(string: "Username not set")
+                removeUsernameMenuItem.isHidden = true
+            }
+        } else {
+            usernameList = defaults.object(forKey: "username") as! [String]
+            updateUsernameListLabel()
+        }
+    }
     
     func loggingEnabled() -> Bool {
         let task = Process()
@@ -174,27 +471,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue)!.replacingOccurrences(of: "\n", with: "")
         
         /*
-        let task = NSTask()
-        let command = "if ! [[ $(grep -o -m 1 --line-buffered '\\[Power\\]' ~/Library/Preferences/Blizzard/Hearthstone/log.config 2>/dev/null) = \\[Power\\] \\]\\]; then printf '\\[Power\\]\nLogLevel=1\nFilePrinting=true\nConsolePrinting=false\nScreenPrinting=false' >> ~/Library/Preferences/Blizzard/Hearthstone/log.config; echo true ; fi"
-        task.launchPath = "/bin/sh"
-        NSLog("Command: ")
-        NSLog(command)
-        
-        task.arguments = ["-c", command]
-        
-        let pipe = NSPipe()
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        
-        task.standardOutput = pipe
-        task.launch()
-        task.waitUntilExit()
-        
-        
-        let output: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
-        let trimmedStr = output.stringByReplacingOccurrencesOfString("\n", withString: "")
-        NSLog("Output: ")
-        NSLog(output)
- */
+         let task = NSTask()
+         let command = "if ! [[ $(grep -o -m 1 --line-buffered '\\[Power\\]' ~/Library/Preferences/Blizzard/Hearthstone/log.config 2>/dev/null) = \\[Power\\] \\]\\]; then printf '\\[Power\\]\nLogLevel=1\nFilePrinting=true\nConsolePrinting=false\nScreenPrinting=false' >> ~/Library/Preferences/Blizzard/Hearthstone/log.config; echo true ; fi"
+         task.launchPath = "/bin/sh"
+         NSLog("Command: ")
+         NSLog(command)
+         
+         task.arguments = ["-c", command]
+         
+         let pipe = NSPipe()
+         let data = pipe.fileHandleForReading.readDataToEndOfFile()
+         
+         task.standardOutput = pipe
+         task.launch()
+         task.waitUntilExit()
+         
+         
+         let output: String = NSString(data: data, encoding: NSUTF8StringEncoding)! as String
+         let trimmedStr = output.stringByReplacingOccurrencesOfString("\n", withString: "")
+         NSLog("Output: ")
+         NSLog(output)
+         */
         return output == "true"
     }
     
@@ -278,7 +575,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         task.launchPath = "/bin/sh"
         
         task.arguments = ["-c", command]
-
+        
         let outHandle = pipe.fileHandleForReading
         outHandle.waitForDataInBackgroundAndNotify()
         
@@ -418,7 +715,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                                             }
                                         }
                                         self.playerValid = false
-
+                                        
                                     } else if usesUsername {
                                         self.playerValid = true
                                     }
@@ -459,19 +756,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                     }
                     outHandle.waitForDataInBackgroundAndNotify()
                 } else {
-                    //print("EOF on stdout from process")
+                    //NSLog("EOF on stdout from process")
                     NotificationCenter.default.removeObserver(obs1)
                 }
         }
         /*
-        obs2 = NSNotificationCenter.defaultCenter().addObserverForName(
-            NSTaskDidTerminateNotification,
-            object: task,
-            queue: nil) {
-                notification -> Void in
-                //print("terminated")
-                NSNotificationCenter.defaultCenter().removeObserver(obs2)
-        }*/
+         obs2 = NSNotificationCenter.defaultCenter().addObserverForName(
+         NSTaskDidTerminateNotification,
+         object: task,
+         queue: nil) {
+         notification -> Void in
+         //NSLog("terminated")
+         NSNotificationCenter.defaultCenter().removeObserver(obs2)
+         }*/
         
         
         task.launch()
@@ -489,189 +786,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     
-
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
-        if loggingEnabled() && (NSWorkspace.shared().runningApplications.description.range(of: "unity.Blizzard Entertainment.Hearthstone") != nil) {
-            printAlert("Logging Enabled", text: "Please restart Hearthstone in order to start receiving notifications")
-        }
+        //resetDefaults()
         
-        aboutWindow.title = "About Hearthstone Notifications"
-        aboutWindow.level = 100
-        //aboutWindow.setFloat = true
+        initializeMenuItems()
         
-        icon?.isTemplate = true
-        checkIcon?.isTemplate = true
+        loadSyncConfiguration()
+        loadConfigurationFile()
+        loadBroadcastRequest()
+        loadNotifications()
         
-        statusItem.image = icon
-        statusItem.menu = statusMenu
+        renderMenuItemsUsingNotifications()
         
-        NSUserNotificationCenter.default.delegate = self;
+        NSLog("Completed Initialization")
         
-        
-        statusMenu.addItem(userNameItem)
-        statusMenu.addItem(NSMenuItem.separator())
-        let urlString = "https://raw.githubusercontent.com/skonagaya/CasualStone/master/CasualStone/broadcast.json"
-        
-        if let url = URL(string: urlString) {
-            if let data = try? Data(contentsOf: url, options: []) {
-                let json = JSON(data: data)
-                
-                if json != JSON.null {
-                    if (currentVersion != json["latest"]["version"].stringValue) {
-                        printAlert("Version Update",text:"New version available below\n\nhttps://github.com/skonagaya/CasualStone/releases")
-                            
-                    }
-                    
-                    if (defaults.object(forKey: "logviewed") != nil) {
-                        if (defaults.object(forKey: "logviewed") as! String != json["latest"]["version"].stringValue)
-                        {
-                            printAlert("Version Update",text:json["latest"]["logchange"].stringValue)
-                            defaults.set(json["latest"]["version"].stringValue, forKey: "logviewed")
-                            defaults.synchronize()
-                        }
-                    } else {
-                        printAlert("Version Update",text:json["latest"]["logchange"].stringValue)
-                        defaults.set(json["latest"]["version"].stringValue, forKey: "logviewed")
-                        defaults.synchronize()
-                    }
-                }
-            }
-        }
-        
-        
-        // Read the JSON file
-        if let path = Bundle.main.path(forResource: "config", ofType: "json") {
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: NSData.ReadingOptions.mappedIfSafe)
-                let jsonObj = JSON(data: data)
-                if jsonObj != JSON.null {
-                    
-                    // We'll keep track of the JSON file in case it was modified
-                    // Because if it's modified, then the defaults would become invalid (ie won't match)
-                    if (defaults.object(forKey: "JSON") != nil)
-                    {
-                        NSLog("Found pre-existing JSON")
-                        if (defaults.object(forKey: "JSON") as! String != jsonObj.rawString()!)
-                        {
-                            printAlert("Reverting Defaults", text: "We found changes to your configuration file so we're reverting to default values.")
-                            resetDefaults()
-                            
-                        }
-                    }
-                    
-                    // Save a copy of the config file in defaults
-                    defaults.set(jsonObj.rawString()!, forKey: "JSON")
-                    defaults.synchronize()
-                    
-                    var defaultTargetListFound = false
-                    
-                    
-                    if (defaults.object(forKey: "targetList") != nil)
-                    {
-                        targetList = (defaults.object(forKey: "targetList") as! [String])
-                        NSLog("Found pre-existing targetList")
-                        NSLog(targetList[0])
-                        defaultTargetListFound = true
-                    }
-                    
-                    // Create a menu item for each JSON entry
-                    var notifIndex = 0
-                    for notifObj in jsonObj["notificationList"].arrayValue {
-                        let label = notifObj["notifLabel"].stringValue
-                        let content = notifObj["notifContent"].stringValue
-                        let command = notifObj["commandLine"].stringValue
-                        let image = notifObj["notifImageLocation"].stringValue
-                        let containsUsername = notifObj["containsUsername"].boolValue
-                        let showInMenu = notifObj["showInMenu"].boolValue
-                        
-                        if !defaultTargetListFound {
-                            targetList.append("BOTH")
-                        }
-                        
-                        if (showInMenu){
-                        
-                            createMenuItem(label,
-                                           content: content,
-                                           command: command,
-                                           index: notifIndex,
-                                           target: targetList[notifIndex],
-                                           usesUsername: containsUsername,
-                                           isCustom: false,
-                                           imageLocation: image
-                            )
-                            notifIndex = notifIndex + 1
-                        }
-                    }
-                    
-                    NSLog(targetList.description)
-                    
-                    NSLog("Finished creating menu items")
-                    defaults.set(targetList, forKey: "targetList")
-                    defaults.synchronize()
-                    NSLog("Synchronized initial targetList to user defaults")
-                    
-                    if let menuName = jsonObj["notificationList"][0]["menuName"].string {
-                        NSLog(menuName)
-                    }
-                    
-                } else {
-                    printAlert("Error",text: "Unable to read configuration file. The application will close.")
-                    NSApp.terminate(self)
-                }
-            } catch let error as NSError {
-                printAlert("Error",text: error.localizedDescription)
-                NSApp.terminate(self)
-                print(error.localizedDescription)
-            }
-        } else {
-            printAlert("Error",text: "Unable to locate configuration file.")
-            NSApp.terminate(self)
-            print("Invalid filename/path.")
-        }
-        
-        
-        statusMenu.addItem(NSMenuItem.separator())
-        
-        let usernameMenuItem = NSMenuItem()
-        usernameMenuItem.title = "Add Username"
-        statusMenu.addItem(usernameMenuItem)
-        usernameMenuItem.action = #selector(AppDelegate.usernameMenuClicked(_:))
-        
-        removeUsernameMenuItem.title = "Remove Username"
-        statusMenu.addItem(removeUsernameMenuItem)
-        removeUsernameMenuItem.action = #selector(AppDelegate.removeUsernameMenuClicked(_:))
-        
-        if usernameList.isEmpty{
-            removeUsernameMenuItem.isHidden = true
-        }
-        
-        let aboutMenuItem = NSMenuItem()
-        aboutMenuItem.title = "About"
-        statusMenu.addItem(aboutMenuItem)
-        aboutMenuItem.action = #selector(AppDelegate.aboutMenuClicked(_:))
-        
-        let quitMenuItem = NSMenuItem()
-        quitMenuItem.title = "Quit"
-        statusMenu.addItem(quitMenuItem)
-        quitMenuItem.action = #selector(AppDelegate.quitMenuClicked(_:))
-        
-        
-        if defaults.object(forKey: "username") == nil || (defaults.object(forKey: "username") as! [String]).isEmpty {
-            
-            let userInput = promptAlert("Notification Setup", text: "Your username is used to distinguish you and your opponent.\n\nEnter your username below:")
-            if (userInput != "") {
-                addToUsernameListLabel(userInput)
-            } else {
-                userNameItem.attributedTitle = NSAttributedString(string: "Username not set")
-                removeUsernameMenuItem.isHidden = true
-            }
-        } else {
-            usernameList = defaults.object(forKey: "username") as! [String]
-            updateUsernameListLabel()
-        }
-        
-
     }
     func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
         return true
@@ -684,16 +814,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 addToUsernameListLabel(userInput)
             } else {return}
         } else {
-                NSWorkspace.shared().launchApplication("/Applications/Hearthstone/Hearthstone.app")
+            NSWorkspace.shared().launchApplication("/Applications/Hearthstone/Hearthstone.app")
         }
         
     }
     
-
+    
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
-
+    
     @IBAction func menuClicked(_ sender: NSMenuItem) {
         
         
@@ -753,9 +883,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
+    func promptConfirmationAlert(_ title: String, text: String) -> Bool {
+        NSRunningApplication.current().activate(options: NSApplicationActivationOptions.activateIgnoringOtherApps)
+        let msg = NSAlert()
+        msg.addButton(withTitle: "Enable")      // 1st button
+        msg.addButton(withTitle: "Cancel")  // 2nd button
+        msg.messageText = title
+        msg.informativeText = text
+        //let response: NSModalResponse = msg.runModal()
+        
+        return msg.runModal() == NSAlertFirstButtonReturn
+    }
+    
     func userNameExists() -> Bool {
         
         return (!usernameList.isEmpty)
     }
-
+    
 }

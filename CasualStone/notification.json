@@ -14,7 +14,7 @@
                          "containsUsername": true,
                          "showInMenu": true
                          }, {
-                         "commandLine": "tail -f /Applications/Hearthstone/Logs/Power.log | grep --line-buffered 'TAG_CHANGE Entity=.* tag=PLAYER_ID value=' | grep --line-buffered GameState | sed -l 's/.*Entity=//g; s/tag=PLAYER_ID.*//g' | tr -u '\n' ' '",
+                         "commandLine": "tail -f /Applications/Hearthstone/Logs/Power.log | grep --line-buffered 'TAG_CHANGE Entity=.* tag=PLAYSTATE value=PLAYING'| grep --line-buffered PowerTaskList | sed -l 's/.*Entity=//g; s/tag=PLAYSTATE.*//g' | tr -u '\n' ' '",
                          "notifLabel": "Start Game",
                          "notifContent": "Queue finished. Game is now starting",
                          "notifImageLocation": "start",
