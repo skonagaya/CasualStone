@@ -1,6 +1,6 @@
 {
     "notificationList": [{
-                         "commandLine": "tail -f /Applications/Hearthstone/Logs/Power.log | grep -A1 --line-buffered 'TAG_CHANGE Entity=GameEntity tag=STEP value=MAIN_READY' | grep -E --line-buffered 'BLOCK_START BlockType=TRIGGER Entity=(.*) EffectCardId= EffectIndex=1 Target=0' | sed -l 's/.*Entity=//g; s/ EffectCardId=.*//g'",
+                         "commandLine": "tail -f /Applications/Hearthstone/Logs/Power.log | grep --line-buffered 'GameState\.DebugPrintPower' | grep -A1 --line-buffered 'NUM_CARDS_DRAWN_THIS_TURN value=0' | grep -E --line-buffered 'TAG_CHANGE Entity=(.*) tag=NUM_CARDS_DRAWN_THIS_TURN value=0' | sed -l 's/.*Entity=//g; s/ tag=NUM_CARDS_DRAWN_THIS_TURN.*//g'",
                          "notifLabel": "Start Turn",
                          "notifContent": "_output_'s turn started",
                          "notifImageLocation": "turn",
